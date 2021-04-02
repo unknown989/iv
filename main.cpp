@@ -14,41 +14,73 @@ Description : This is a PNG Image Viewer that has the basic features ,for more i
 #include <string>
 #include <iomanip>
 
+#include "jpeg/jpeg.h"
+#include "headers/filedetection.hpp"
+
 using namespace std;
 
-int main(int argc,char** argv){
-    bool resizeRect = false;
-	if(argc < 1){
-        std::cout << "./reader [filename].png" << std::endl;
-        return -1;
-	}
+void readPNG(string filename,uint32_t &height,uint32_t &width,sf::Image *img){
+	
 	// Read the image
-	png::image<png::rgb_pixel> image(argv[1]);
-	uint32_t height = image.get_height(); // Height 
-	uint32_t width = image.get_width(); // width
-    int winH = 600; // Window Height
-    int winW = 800; // Window Width
-    sf::RenderWindow app(sf::VideoMode(winH,winW),"ir : Image Reader"); // Window initialization
-
-    sf::Image img; 
-
-    img.create(width,height); // Create an sf::Image with the same dimensions as the png::image() image;
+	png::image<png::rgb_pixel> image(filename);
+	height = image.get_height(); // Height 
+	width = image.get_width(); // width
+    img->create(width,height); // Create an sf::Image with the same dimensions as the png::image() image;
 
     for(int x = 0;x < width;x++){
         for(int y = 0;y < height;y++){
-            img.setPixel(x,y,sf::Color(image.get_pixel(x,y).red,image.get_pixel(x,y).green,image.get_pixel(x,y).blue)); // Get the RGB values of x,y in the image and load them to the image
+            img->setPixel(x,y,sf::Color(image.get_pixel(x,y).red,image.get_pixel(x,y).green,image.get_pixel(x,y).blue)); // Get the RGB values of x,y in the image and load them to the image
         }
     }
+}
+void readJPG(string filename,uint32_t &height,uint32_t &width,sf::Image *img){
+	marengo::jpeg::Image image(filename);
+	height = (uint32_t)image.getHeight();
+	width = (uint32_t)image.getWidth();
+	img->create(width,height);
+	for(int x = 0;x < width;x++){
+	        for(int y = 0;y < height;y++){
+	        	vector<uint8_t> pixel = image.getPixel(x,y);
+	            img->setPixel(x,y,sf::Color(pixel[0],pixel[1],pixel[2])); // Get the RGB values of x,y in the image and load them to the image
+	   		}
+	}
+}
+
+int main(int argc,char** argv){
+    bool resizeRect = false;
+	if(argc < 2){
+        std::cout << "./reader [filename].png" << std::endl;
+        return 1;
+	}
+	cout << "Filename : " << argv[1] << endl;
+	uint32_t height,width;
+    int winH = 600; // Window Height
+    int winW = 800; // Window Width
+
+    sf::Image* img = new sf::Image();
+
+	// Render the PNG Image
+	string detectionres = detect(argv[1]); // File Format Detection result	
+	if( detectionres == "PNG"){
+		cout << "Detected a PNG File Format" << endl;
+		readPNG(string(argv[1]),height,width,img);
+	}else if(detectionres == "JPEG"){	
+		cout << "Detected a JPEG File Format" << endl;
+		readJPG(string(argv[1]),height,width,img);
+	}else{
+		cout << "File Format/Type is not supported yet" << endl;
+	}
+
+	sf::RenderWindow app(sf::VideoMode(winH,winW),"ir : Image Reader"); // Window initialization
+
 
     sf::Texture* t;
-    t->loadFromImage(img); // Load a texture with the img
+    t->loadFromImage(*img); // Load a texture with the img
     sf::RectangleShape rect; 
     rect.setSize(sf::Vector2f(width,height)); // Make a rectangle with the width and height of the image
-
     rect.setTexture(t);
     rect.setOrigin({rect.getSize().x/2,rect.getSize().y/2}); // Setting the origin to the center
 	rect.setPosition({0,0}); // Setting the rectangle to the center of the screen
-
 	
     int mouseOldX = sf::Mouse::getPosition().x; // Mouse Previous X
     int mouseOldY = sf::Mouse::getPosition().y; // Mouse Previous Y
@@ -57,6 +89,8 @@ int main(int argc,char** argv){
     int xDelta = 0; // XDelta (check if the mouse cursor is going right or left)
     int yDelta = 0; // YDelta (check if the mouse cursor is going up or down)
     float zoom = 1; // Zooming value
+	// float zoomDelta = 1; // Variable to make the mouse slower when zooming in
+	
 	while(app.isOpen()){
         sf::Event event;
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
@@ -126,7 +160,7 @@ int main(int argc,char** argv){
                 exit(0);
             }
         }
-        rect.move({xDelta*xMouseSpeed,yDelta*yMouseSpeed});// Moving the rectangle that holds the texture now using the x and y delta and the x,y speed
+        rect.move({xDelta*(float)xMouseSpeed,yDelta*(float)yMouseSpeed});// Moving the rectangle that holds the texture now using the x and y delta and the x,y speed
 
         app.clear(sf::Color::White);
         app.setView(sf::View(sf::Vector2f(0,0),sf::Vector2f(app.getSize().x*zoom,app.getSize().y*zoom))); // Setting the sf::View for implementing the zooming ability by adjust the size of the view : multiplying it by the zoom value
