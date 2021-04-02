@@ -8,5 +8,5 @@ clean:
 
 install:
 	g++ -c main.cpp jpeg/jpeg.h jpeg/jpeg.cpp -I/usr/include/libpng16 -ljpeg
-	g++ main.o jpeg.o -O3 -std=c++14 -o iv -lsfml-graphics -lsfml-system -lsfml-window -lpng16
+	g++ jpeg.o main.o -o iv -lsfml-graphics -lsfml-system -lsfml-window -lpng16 -ljpeg
 	mv ./iv /usr/bin/
