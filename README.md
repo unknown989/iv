@@ -1,7 +1,7 @@
-# <center>VI</center>
-<center><img src="https://raw.githubusercontent.com/unknown989/iv/main/images/logo.png" width="150" height="150"/></center>
+# VI
+<p align="center"><img src="https://raw.githubusercontent.com/unknown989/iv/main/images/logo.png" width="150" height="150"/></p>
 
-#### <center>The Image Viewer</center>
+#### The Image Viewer
 
 <center> Vi - The Image Viewer is a linux image viewer built using c++</center>
 
