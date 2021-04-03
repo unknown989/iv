@@ -11,6 +11,15 @@
 * [png++](https://www.nongnu.org/pngpp) : a C++ wrapper for [libpng](http://www.libpng.org/pub/png/libpng.html) library.
 * [libjpeg_cpp](https://github.com/md81544/libjpeg_cpp) : C++ wrapper around (parts of) libjpeg
 
+## Features
+* Supports JPEG and PNG Images
+* Ability to move the image with the mouse and zooming in and out
+
+## TODO
+* Adding more Images Formats
+* Adding flipping and saving the image
+* Adding filters
+
 ## Building
 ```sh
 git clone https://github.com/unknown989/iv iv
