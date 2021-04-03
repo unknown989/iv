@@ -3,7 +3,7 @@
 <p align="center"><img src="https://raw.githubusercontent.com/unknown989/iv/main/images/logo.png" width="150" height="150"/></p>
  
 
-<p align=center> iv - The Image Viewer is a linux image viewer built using c++</p>
+<p align=center> <b>IV</b> -  The Image Viewer :  is a linux image viewer built using c++</p>
 
 # Tech
 * [C++](https://en.wikipedia.org/wiki/C%2B%2B) : The Programming Language
