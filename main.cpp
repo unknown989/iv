@@ -68,6 +68,7 @@ int main(int argc,char** argv){
 		readJPG(string(argv[1]),height,width,img);
 	}else{
 		cout << "File Format/Type is not supported yet" << endl;
+		return -1;
 	}
 
 	sf::RenderWindow app(sf::VideoMode(winH,winW),"ir : Image Reader"); // Window initialization
