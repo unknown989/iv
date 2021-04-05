@@ -47,7 +47,6 @@ void readJPG(string filename,uint32_t &height,uint32_t &width,sf::Image *img){
 }
 
 int main(int argc,char** argv){
-    bool resizeRect = false;
 	if(argc < 2){
         std::cout << "./reader [filename].png" << std::endl;
         return 1;
@@ -123,47 +122,45 @@ int main(int argc,char** argv){
             mouseOldX = mouseCurrentX; // Set oldX to x
             mouseOldY = mouseCurrentY; // set oldY to y
         }
-
         while (app.pollEvent(event))
-        {
-            if(event.type == sf::Event::Resized){
-                resizeRect = true;
-            }
-            if(event.type == sf::Event::MouseButtonReleased){
-                xMouseSpeed = 1; // If the mouse button is released we set the speed of both x & y to 1
-                yMouseSpeed = 1;
-            }else if(event.type == sf::Event::MouseButtonPressed){
-            int mouseCurrentX = sf::Mouse::getPosition(app).x; // Same the previous movement method
-            int mouseCurrentY = sf::Mouse::getPosition(app).y;
-            xMouseSpeed = abs(mouseCurrentX - mouseOldX);
-            yMouseSpeed = abs(mouseCurrentY - mouseOldY);
-            }
-            if(event.type == sf::Event::MouseWheelMoved)
-            { // Zooming system
-                int delta = event.mouseWheel.delta; // Direction of the mouse wheel (up,down)
-                if(delta < 0 && ((0 < zoom) && (zoom < 4))){ // if the wheel is going up and the zoom isn't in the max and the min zoom in by 0.1
-                    zoom -= 0.1;
-                }else if(delta > 0 && ((0 < zoom) && (zoom < 4))){ // vice-versa
-                    zoom += 0.1;
-                }
-                // Pretty stupid but c++ behave weirdly
-                if(zoom >= 4){ // just getting the zoom back to its limits
-                zoom = 3.9;
-                }
-                if(zoom <= 0){
-                zoom = 0.1;
-                }
-
-            }
-            if (event.type == sf::Event::Closed){
-                app.close();
-                exit(0);
-            }
+                {
+                    if(event.type == sf::Event::MouseButtonReleased){
+                        xMouseSpeed = 1; // If the mouse button is released we set the speed of both x & y to 1
+                        yMouseSpeed = 1;
+                    }else if(event.type == sf::Event::MouseButtonPressed){
+                    int mouseCurrentX = sf::Mouse::getPosition(app).x; // Same the previous movement method
+                    int mouseCurrentY = sf::Mouse::getPosition(app).y;
+                    xMouseSpeed = abs(mouseCurrentX - mouseOldX);
+                    yMouseSpeed = abs(mouseCurrentY - mouseOldY);
+                    }
+                    if(event.type == sf::Event::MouseWheelMoved)
+                    { // Zooming system
+                        int delta = event.mouseWheel.delta; // Direction of the mouse wheel (up,down)
+                        if(delta < 0 && ((0 < zoom) && (zoom < 4))){ // if the wheel is going up and the zoom isn't in the max and the min zoom in by 0.1
+                            zoom -= 0.1;
+                        }else if(delta > 0 && ((0 < zoom) && (zoom < 4))){ // vice-versa
+                            zoom += 0.1;
+                        }
+                        // Pretty stupid but c++ behave weirdly
+                        if(zoom >= 4){ // just getting the zoom back to its limits
+                        zoom = 3.9;
+                        }
+                        if(zoom <= 0){
+                        zoom = 0.1;
+                        }
+        
+        			}
+		     if (event.type == sf::Event::Closed){
+		               app.close();
+		               break;
+		           }
         }
+
         rect.move({xDelta*(float)xMouseSpeed,yDelta*(float)yMouseSpeed});// Moving the rectangle that holds the texture now using the x and y delta and the x,y speed
 
-        app.clear(sf::Color::White);
         app.setView(sf::View(sf::Vector2f(0,0),sf::Vector2f(app.getSize().x*zoom,app.getSize().y*zoom))); // Setting the sf::View for implementing the zooming ability by adjust the size of the view : multiplying it by the zoom value
+        
+        app.clear(sf::Color::White);
         app.draw(rect);
 
         app.display();

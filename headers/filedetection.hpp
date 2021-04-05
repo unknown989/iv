@@ -40,7 +40,7 @@ string detect(const char* fn){
 	return getType(splitted);
 }
 
-int example(int argc,char** argv){
+/*int example(int argc,char** argv){
 	if (argc <2){cout <<"A File is Required" << endl;return -1;};
 	//char* cmd = {"f","i","l","e"," "};
 	string cmd = "file '"+string(argv[1])+"'";
@@ -49,4 +49,5 @@ int example(int argc,char** argv){
 	vector<string> o;
 	split(res,' ',o);
 	cout <<"FileType : "<< getType(o) << endl;
-}
+	return 0;
+}*/
