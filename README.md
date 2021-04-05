@@ -10,6 +10,10 @@
 * [SFML](https://www.sfml-dev.org) : Simple and Fast Multimedia Library
 * [png++](https://www.nongnu.org/pngpp) : a C++ wrapper for [libpng](http://www.libpng.org/pub/png/libpng.html) library.
 * [libjpeg_cpp](https://github.com/md81544/libjpeg_cpp) : C++ wrapper around (parts of) libjpeg
+## Requirements
+* SFML : ```sudo apt install libsfmldev```
+* libjpeg : ```sudo apt install libjpeg-dev```
+* png++ : ```./install.sh``` 
 
 ## Building
 ```sh
