@@ -12,8 +12,8 @@
 * [libjpeg_cpp](https://github.com/md81544/libjpeg_cpp) : C++ wrapper around (parts of) libjpeg (used on old.cpp)
 ## Requirements
 * SFML : ```sudo apt install libsfmldev```
-* libjpeg : ```sudo apt install libjpeg-dev```
-* png++ : ```./install.sh``` 
+* libjpeg(not required on the new update) : ```sudo apt install libjpeg-dev```
+* png++(not required on the new update): ```./install.sh``` 
 
 ## Building
 ```sh
