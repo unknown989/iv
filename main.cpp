@@ -8,43 +8,12 @@ Description : This is a PNG Image Viewer that has the basic features ,for more i
 =================================================================================
 */
 
-#include <png++/png.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
 #include <iomanip>
 
-#include "jpeg/jpeg.h"
-#include "headers/filedetection.hpp"
-
 using namespace std;
-
-void readPNG(string filename,uint32_t &height,uint32_t &width,sf::Image *img){
-	
-	// Read the image
-	png::image<png::rgb_pixel> image(filename);
-	height = image.get_height(); // Height 
-	width = image.get_width(); // width
-    img->create(width,height); // Create an sf::Image with the same dimensions as the png::image() image;
-
-    for(int x = 0;x < width;x++){
-        for(int y = 0;y < height;y++){
-            img->setPixel(x,y,sf::Color(image.get_pixel(x,y).red,image.get_pixel(x,y).green,image.get_pixel(x,y).blue)); // Get the RGB values of x,y in the image and load them to the image
-        }
-    }
-}
-void readJPG(string filename,uint32_t &height,uint32_t &width,sf::Image *img){
-	marengo::jpeg::Image image(filename);
-	height = (uint32_t)image.getHeight();
-	width = (uint32_t)image.getWidth();
-	img->create(width,height);
-	for(int x = 0;x < width;x++){
-	        for(int y = 0;y < height;y++){
-	        	vector<uint8_t> pixel = image.getPixel(x,y);
-	            img->setPixel(x,y,sf::Color(pixel[0],pixel[1],pixel[2])); // Get the RGB values of x,y in the image and load them to the image
-	   		}
-	}
-}
 
 int main(int argc,char** argv){
 	if(argc < 2){
@@ -56,26 +25,20 @@ int main(int argc,char** argv){
     int winH = 600; // Window Height
     int winW = 800; // Window Width
 
-    sf::Image* img = new sf::Image();
+    sf::Image img;
 
 	// Render the PNG Image
-	string detectionres = detect(argv[1]); // File Format Detection result	
-	if( detectionres == "PNG"){
-		cout << "Detected a PNG File Format" << endl;
-		readPNG(string(argv[1]),height,width,img);
-	}else if(detectionres == "JPEG"){	
-		cout << "Detected a JPEG File Format" << endl;
-		readJPG(string(argv[1]),height,width,img);
-	}else{
-		cout << "File Format/Type is not supported yet" << endl;
-		return -1;
-	}
+
+	img.loadFromFile(argv[1]);
+	height = img.getSize().y;
+	width = img.getSize().x;
+
 
 	sf::RenderWindow app(sf::VideoMode(winH,winW),"ir : Image Reader"); // Window initialization
 
 
     sf::Texture* t;
-    t->loadFromImage(*img); // Load a texture with the img
+    t->loadFromImage(img); // Load a texture with the img
     sf::RectangleShape rect; 
     rect.setSize(sf::Vector2f(width,height)); // Make a rectangle with the width and height of the image
     rect.setTexture(t);
@@ -93,6 +56,7 @@ int main(int argc,char** argv){
 	
 	while(app.isOpen()){
         sf::Event event;
+		
         if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
             int mouseCurrentX = sf::Mouse::getPosition(app).x; // The current X of the mouse cursor
             int mouseCurrentY = sf::Mouse::getPosition(app).y; // The Current Y of the mouse cursor
@@ -124,20 +88,34 @@ int main(int argc,char** argv){
             mouseOldY = mouseCurrentY; // set oldY to y
         }
         while (app.pollEvent(event))
-                {
-                    if(event.type == sf::Event::MouseButtonReleased){
+               {
+               	switch(event.type){
+				 	case sf::Event::Closed:{					 		
+						cout << "Closing" << endl;
+		               	app.close();
+		               	break;
+				 	}
+
+               		case sf::Event::MouseButtonReleased:{
+               			
                         xMouseSpeed = 1; // If the mouse button is released we set the speed of both x & y to 1
-                        yMouseSpeed = 1;
-                    }else if(event.type == sf::Event::MouseButtonPressed){
-                    int mouseCurrentX = sf::Mouse::getPosition(app).x; // Same the previous movement method
-                    int mouseCurrentY = sf::Mouse::getPosition(app).y;
-                    xMouseSpeed = abs(mouseCurrentX - mouseOldX);
-                    yMouseSpeed = abs(mouseCurrentY - mouseOldY);
-                    }
-                    if(event.type == sf::Event::MouseWheelMoved)
-                    { // Zooming system
-                        int delta = event.mouseWheel.delta; // Direction of the mouse wheel (up,down)
+                        yMouseSpeed = 1;; // If the mouse button is released we set the speed of both x & y to 1
+               			break;
+               		}
+                	case sf::Event::MouseButtonPressed:{
+                		
+	                    int mouseCurrentX = sf::Mouse::getPosition(app).x; // Same the previous movement method
+	                    int mouseCurrentY = sf::Mouse::getPosition(app).y;
+	                    xMouseSpeed = abs(mouseCurrentX - mouseOldX);
+                   		yMouseSpeed = abs(mouseCurrentY - mouseOldY);
+                		break;
+                	}
+	            	case sf::Event::MouseWheelMoved:{
+	            		
+						// Zooming system
+						int delta = event.mouseWheel.delta; // Direction of the mouse wheel (up,down)
                         if(delta < 0 && ((0 < zoom) && (zoom < 4))){ // if the wheel is going up and the zoom isn't in the max and the min zoom in by 0.1
+	            		
                             zoom -= 0.1;
                         }else if(delta > 0 && ((0 < zoom) && (zoom < 4))){ // vice-versa
                             zoom += 0.1;
@@ -149,13 +127,12 @@ int main(int argc,char** argv){
                         if(zoom <= 0){
                         zoom = 0.1;
                         }
+	            		break;
+	            	}
+	           }
+       }
         
-        			}
-		     if (event.type == sf::Event::Closed){
-		               app.close();
-		               break;
-		           }
-        }
+        
 
         rect.move({xDelta*(float)xMouseSpeed,yDelta*(float)yMouseSpeed});// Moving the rectangle that holds the texture now using the x and y delta and the x,y speed
 
