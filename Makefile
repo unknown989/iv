@@ -1,4 +1,3 @@
-
 all:
 	rm headers/jpeg.h.gch &
 	g++ -std=c++17 -c main.cpp 
@@ -12,7 +11,7 @@ old:
 
 
 clean:
-	rm main.o reader jpeg.o log.txt creader
+	rm main.o reader jpeg.o log.txt creader old.o oldreader
 
 
 install:
