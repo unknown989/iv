@@ -35,13 +35,11 @@ int main(int argc,char** argv){
 
     sf::Texture t;
     t.loadFromFile(argv[1]); // Load a texture with the img
-    printf("Texture's loaded\n");
     sf::RectangleShape rect;
     rect.setSize(sf::Vector2f(t.getSize().x,t.getSize().y)); // Make a rectangle with the width and height of the image
     rect.setTexture(&t);
     rect.setOrigin({rect.getSize().x/2,rect.getSize().y/2}); // Setting the origin to the center
 	rect.setPosition({0,0}); // Setting the rectangle to the center of the screen
-    printf("Rect's initiated\n");
 	
     int mouseOldX = sf::Mouse::getPosition(app).x; // Mouse Previous X
     int mouseOldY = sf::Mouse::getPosition(app).y; // Mouse Previous Y
