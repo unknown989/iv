@@ -8,13 +8,8 @@
 # Tech
 * [C++](https://en.wikipedia.org/wiki/C%2B%2B) : The Programming Language
 * [SFML](https://www.sfml-dev.org) : Simple and Fast Multimedia Library
-* [png++](https://www.nongnu.org/pngpp) : a C++ wrapper for [libpng]  (http://www.libpng.org/pub/png/libpng.html) library (used on old.cpp).
-* [libjpeg_cpp](https://github.com/md81544/libjpeg_cpp) : C++ wrapper around (parts of) libjpeg (used on old.cpp)
 ## Requirements
 * SFML : ```sudo apt install libsfmldev```
-* libjpeg(not required on the new update) : ```sudo apt install libjpeg-dev```
-* png++(not required on the new update): ```./install.sh``` 
-
 ## Building
 ```sh
 git clone https://github.com/unknown989/iv iv
