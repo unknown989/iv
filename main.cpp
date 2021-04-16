@@ -28,7 +28,7 @@ int main(int argc,char** argv){
     int winH = 600; // Window Height
     int winW = 800; // Window Width
 
-	sf::RenderWindow app(sf::VideoMode(winH,winW),"ir : Image Reader"); // Window initialization
+	sf::RenderWindow app(sf::VideoMode(winH,winW),"iv : Image Viewer"); // Window initialization
     { // Creating a new block so that the icon variable will be deleted after finishing setting it up
         auto icon = sf::Image(); // Setting an icon
         if(icon.loadFromFile("images/logo.png")){
@@ -38,7 +38,7 @@ int main(int argc,char** argv){
 
 
     sf::Texture t;
-    t.loadFromFile(argv[1]); // Load a texture with the img
+    if(!t.loadFromFile(argv[1]))return 1; // Load a texture with the img
     sf::RectangleShape rect;
     rect.setSize(sf::Vector2f(t.getSize().x,t.getSize().y)); // Make a rectangle with the width and height of the image
     rect.setTexture(&t);
