@@ -16,6 +16,9 @@ Description : This is a PNG Image Viewer that has the basic features ,for more i
 
 using namespace std;
 
+
+bool moveRect = true;
+
 int main(int argc,char** argv){
 	if(argc < 2){
         std::cout << "iv [filename]" << std::endl;
@@ -26,12 +29,13 @@ int main(int argc,char** argv){
     int winW = 800; // Window Width
 
 	sf::RenderWindow app(sf::VideoMode(winH,winW),"ir : Image Reader"); // Window initialization
-    { // Creating a new block so that the variable will be deleted after finishing
+    { // Creating a new block so that the icon variable will be deleted after finishing setting it up
         auto icon = sf::Image(); // Setting an icon
         if(icon.loadFromFile("images/logo.png")){
             app.setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());
         }
-    }    
+    }
+
 
     sf::Texture t;
     t.loadFromFile(argv[1]); // Load a texture with the img
@@ -52,8 +56,8 @@ int main(int argc,char** argv){
 	
 	while(app.isOpen()){
         sf::Event event;
-		
-        if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+		sf::Mouse mouse;
+        if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && (app.getPosition().x <= mouse.getPosition().x && mouse.getPosition().x <= app.getPosition().x + app.getSize().x &&app.getPosition().y <= mouse.getPosition().y && mouse.getPosition().y <= app.getPosition().y + app.getSize().y)){ // Checking if the mouse is inside the window and the left mouse button pressed
             int mouseCurrentX = sf::Mouse::getPosition(app).x; // The current X of the mouse cursor
             int mouseCurrentY = sf::Mouse::getPosition(app).y; // The Current Y of the mouse cursor
             xDelta = 0;
@@ -95,6 +99,15 @@ int main(int argc,char** argv){
 		               	app.close();
 		               	break;
 				 	}
+                    case sf::Event::LostFocus:{
+                        moveRect = false;
+                        break;
+                    }
+                    case sf::Event::GainedFocus:{
+                        moveRect = true;
+                        break;
+                    }
+                    
                		case sf::Event::MouseButtonReleased:{
                			
                         xMouseSpeed = 1; // If the mouse button is released we set the speed of both x & y to 1
@@ -134,10 +147,11 @@ int main(int argc,char** argv){
        }
         
         
+        if(moveRect){
+            rect.move({xDelta*(float)xMouseSpeed,yDelta*(float)yMouseSpeed});// Moving the rectangle that holds the texture now using the x and y delta and the x,y speed
+            app.setView(sf::View(sf::Vector2f(0,0),sf::Vector2f(app.getSize().x*zoom,app.getSize().y*zoom))); // Setting the sf::View for implementing the zooming ability by adjust the size of the view : multiplying it by the zoom value
+        }
 
-        rect.move({xDelta*(float)xMouseSpeed,yDelta*(float)yMouseSpeed});// Moving the rectangle that holds the texture now using the x and y delta and the x,y speed
-
-        app.setView(sf::View(sf::Vector2f(0,0),sf::Vector2f(app.getSize().x*zoom,app.getSize().y*zoom))); // Setting the sf::View for implementing the zooming ability by adjust the size of the view : multiplying it by the zoom value
         
         app.clear(sf::Color::White);
         app.draw(rect);
