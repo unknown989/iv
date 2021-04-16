@@ -12,41 +12,39 @@ Description : This is a PNG Image Viewer that has the basic features ,for more i
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <stdio.h>
 
 using namespace std;
 
 int main(int argc,char** argv){
 	if(argc < 2){
-        std::cout << "./reader [filename].png" << std::endl;
+        std::cout << "iv [filename]" << std::endl;
         return 1;
 	}
 	cout << "Filename : " << argv[1] << endl;
-	uint32_t height,width;
     int winH = 600; // Window Height
     int winW = 800; // Window Width
 
-    sf::Image img;
-
-	// Render the PNG Image
-
-	img.loadFromFile(argv[1]);
-	height = img.getSize().y;
-	width = img.getSize().x;
-
-
 	sf::RenderWindow app(sf::VideoMode(winH,winW),"ir : Image Reader"); // Window initialization
+    { // Creating a new block so that the variable will be deleted after finishing
+        auto icon = sf::Image(); // Setting an icon
+        if(icon.loadFromFile("images/logo.png")){
+            app.setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());
+        }
+    }    
 
-
-    sf::Texture* t;
-    t->loadFromImage(img); // Load a texture with the img
-    sf::RectangleShape rect; 
-    rect.setSize(sf::Vector2f(width,height)); // Make a rectangle with the width and height of the image
-    rect.setTexture(t);
+    sf::Texture t;
+    t.loadFromFile(argv[1]); // Load a texture with the img
+    printf("Texture's loaded\n");
+    sf::RectangleShape rect;
+    rect.setSize(sf::Vector2f(t.getSize().x,t.getSize().y)); // Make a rectangle with the width and height of the image
+    rect.setTexture(&t);
     rect.setOrigin({rect.getSize().x/2,rect.getSize().y/2}); // Setting the origin to the center
 	rect.setPosition({0,0}); // Setting the rectangle to the center of the screen
+    printf("Rect's initiated\n");
 	
-    int mouseOldX = sf::Mouse::getPosition().x; // Mouse Previous X
-    int mouseOldY = sf::Mouse::getPosition().y; // Mouse Previous Y
+    int mouseOldX = sf::Mouse::getPosition(app).x; // Mouse Previous X
+    int mouseOldY = sf::Mouse::getPosition(app).y; // Mouse Previous Y
     int xMouseSpeed  = 1; // Mouse Speed at X
     int yMouseSpeed  = 1; // Mouse Speed at Y
     int xDelta = 0; // XDelta (check if the mouse cursor is going right or left)
@@ -86,7 +84,11 @@ int main(int argc,char** argv){
 
             mouseOldX = mouseCurrentX; // Set oldX to x
             mouseOldY = mouseCurrentY; // set oldY to y
+        }else{
+            xMouseSpeed = 0;
+            yMouseSpeed = 0;
         }
+
         while (app.pollEvent(event))
                {
                	switch(event.type){
@@ -95,12 +97,13 @@ int main(int argc,char** argv){
 		               	app.close();
 		               	break;
 				 	}
-
                		case sf::Event::MouseButtonReleased:{
                			
                         xMouseSpeed = 1; // If the mouse button is released we set the speed of both x & y to 1
                         yMouseSpeed = 1;; // If the mouse button is released we set the speed of both x & y to 1
-               			break;
+               			xDelta = 0;
+                        yDelta = 0;
+                        break;
                		}
                 	case sf::Event::MouseButtonPressed:{
                 		
