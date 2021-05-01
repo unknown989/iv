@@ -1,8 +1,0 @@
-For Debugging:
-	`make`
-
-For Cleaning:
-	`make clean`
-
-For Building:
-	`sudo make install`
