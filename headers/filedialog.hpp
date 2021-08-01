@@ -1,44 +1,22 @@
-#include <string>
-#include <stdio.h>
 #if defined(__linux__) // any linux distribution
 #define PLATFROM "linux"
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+const char* openfilename(){
+	const char* cmd = "/usr/bin/zenity --file-selection --file-filter='Photo files (jpg,png,jpeg) | *.jpg *.png *.jpeg' > /tmp/iv_filename";
+	system(cmd);
+	FILE* fp = fopen("/tmp/iv_filename","r");
+	char* buff = (char*)malloc(1024);
+	fgets(buff,1024,fp);
+	int size = strlen(buff);
 
-#include <stdlib.h>
-std::string openfilename(){
-	std::string filename;
-	char* fn = (char*)malloc(1025);
-	FILE *f = popen("zenity --file-selection --file-filter='Photo files (jpg,png,jpeg) | *.jpg *.png *.jpeg'", "r");
-	fgets(fn, 1024, f);
-	filename.assign(fn,1024);
-
+	char* filename = (char*)malloc(size);
+	filename = strncpy(filename,buff,size-1);
+	// printf("%s\n %i",buff,(int)size);
 	return filename;
 }
-#elif defined(_WIN32) // any windows system
-#define PLATFROM "win"
-#include <windows.h>
-const char* openfilename(char *filter = "All Files (*.*)\0*.*\0", HWND owner = NULL) {
-  OPENFILENAME ofn;
-  char fileName[MAX_PATH] = "";
-  ZeroMemory(&ofn, sizeof(ofn));
-
-  ofn.lStructSize = sizeof(OPENFILENAME);
-  ofn.hwndOwner = owner;
-  ofn.lpstrFilter = filter;
-  ofn.lpstrFile = fileName;
-  ofn.nMaxFile = MAX_PATH;
-  ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-  ofn.lpstrDefExt = "";
-
-  string fileNameStr;
-
-  if ( GetOpenFileName(&ofn) )
-    fileNameStr = fileName;
-
-  return fileNameStr.c_str();
-}
-
 
 #else
-#define PLATFROM "na"
-	printf("Platform is not recognized , neither linux nor windows . if you have a mac OSX it is not supported")
+	printf("Platform is not recognized , if you have a mac OSX or Windows they are not supported YET!\n");
 #endif
