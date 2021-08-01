@@ -33,7 +33,11 @@ int main(int argc,char** argv){
         auto icon = sf::Image(); // Setting an icon
         if(icon.loadFromFile("images/logo.png")){
             app.setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());
-        }
+        }else if(icon.loadFromFile("/usr/share/iv/icon.png")){
+			app.setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());
+		}else{
+			cout << "Cannot load icon" << endl;
+		}
     }
 
 
