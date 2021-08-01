@@ -13,18 +13,19 @@ Description : This is a PNG Image Viewer that has the basic features ,for more i
 #include <string>
 #include <iomanip>
 #include <stdio.h>
-
+#include "headers/filedialog.hpp"
 using namespace std;
 
 
 bool moveRect = true;
-
 int main(int argc,char** argv){
+	const char* filename = "";
 	if(argc < 2){
-        std::cout << "iv [filename]" << std::endl;
-        return 1;
+        filename = openfilename().c_str();
+	}else{
+		filename = argv[1];
 	}
-	cout << "Filename : " << argv[1] << endl;
+	cout << "Filename : " << filename << endl;
     int winH = 600; // Window Height
     int winW = 800; // Window Width
 
@@ -42,7 +43,7 @@ int main(int argc,char** argv){
 
 
     sf::Texture t;
-    if(!t.loadFromFile(argv[1]))return 1; // Load a texture with the img
+    if(!t.loadFromFile(filename))return 1; // Load a texture with the img
     sf::RectangleShape rect;
     rect.setSize(sf::Vector2f(t.getSize().x,t.getSize().y)); // Make a rectangle with the width and height of the image
     rect.setTexture(&t);
