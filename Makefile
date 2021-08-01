@@ -12,4 +12,4 @@ install:
 	mkdir -p /usr/share/iv/
 	cp images/logo.png /usr/share/iv/icon.png
 	cp iv.desktop /usr/share/applications
-	cp iv.desktop $HOME/Desktop
+	cp iv.desktop ~/Desktop
