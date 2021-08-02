@@ -10,13 +10,14 @@
 * [SFML](https://www.sfml-dev.org) : Simple and Fast Multimedia Library
 ## Requirements
 * SFML : ```sudo apt install libsfmldev```
+* Zenity: ```sudo apt install zenity```
 ## Building
 ```sh
 git clone https://github.com/unknown989/iv iv
 cd iv && make
 sudo make install
 ```
-Use ``` iv [filename]``` To run
+Use ``` iv [filename]``` To run or Use ```iv``` To open a file dialog
 
 ## Contributing
 Just contact me on my <a href="mailto:unknown989@protonmail.com">e-mail</a>
