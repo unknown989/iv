@@ -32,13 +32,14 @@ int main(int argc,char** argv){
 	sf::RenderWindow app(sf::VideoMode(winH,winW),"iv : Image Viewer"); // Window initialization
     { // Creating a new block so that the icon variable will be deleted after finishing setting it up
         auto icon = sf::Image(); // Setting an icon
-        if(icon.loadFromFile("images/logo.png")){
-            app.setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());
-        }else if(icon.loadFromFile("/usr/share/iv/icon.png")){
-			app.setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());
-		}else{
-			cout << "Cannot load icon" << endl;
-		}
+        if(!icon.loadFromFile("images/logo.png")){
+        	if(icon.loadFromFile("/usr/share/iv/icon.png"))
+        		printf("Succesfly loaded it\n");
+ 	     }
+		if(icon.getPixelsPtr() != nullptr)
+			app.setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());	
+		
+		
     }
 
 
