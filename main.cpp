@@ -21,6 +21,7 @@ bool moveRect = true;
 int main(int argc,char** argv){
 	const char* filename = "";
 	if(argc < 2){
+		
         filename = openfilename();
 	}else{
 		filename = argv[1];
