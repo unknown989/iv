@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
-Name=IV - Image Viewer
-GenericName=IV
+Name=iv
+GenericName=Image Viewer
 Exec=iv %F
 Icon=/usr/share/iv/icon.png
 Terminal=false
