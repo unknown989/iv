@@ -34,7 +34,6 @@ int main(int argc,char** argv){
         auto icon = sf::Image(); // Setting an icon
         if(!icon.loadFromFile("images/logo.png")){
         	if(icon.loadFromFile("/usr/share/iv/icon.png"))
-        		printf("Succesfly loaded it\n");
  	     }
 		if(icon.getPixelsPtr() != nullptr)
 			app.setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());	
