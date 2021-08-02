@@ -33,7 +33,7 @@ int main(int argc,char** argv){
     { // Creating a new block so that the icon variable will be deleted after finishing setting it up
         auto icon = sf::Image(); // Setting an icon
         if(!icon.loadFromFile("images/logo.png")){
-        	if(icon.loadFromFile("/usr/share/iv/icon.png"))
+        	icon.loadFromFile("/usr/share/iv/icon.png");
  	     }
 		if(icon.getPixelsPtr() != nullptr)
 			app.setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());	
