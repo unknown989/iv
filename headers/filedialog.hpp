@@ -5,7 +5,7 @@
 #include <cstring>
 const char* openfilename(){
 
-	const char* cmd = "/usr/bin/zenity --file-selection --title='iv - Select an Image' --file-filter='Photo files (jpg,png,jpeg) | *.jpg *.png *.jpeg'";
+	const char* cmd = "/usr/bin/zenity --file-selection --title='iv - Select an Image' --file-filter='Photo files (jpg,png,jpeg,bmp) | *.jpg *.png *.jpeg *.bmp'";
 	FILE* fp = popen(cmd,"r");
 	
 	char* buff = (char*)malloc(1024);
