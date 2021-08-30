@@ -30,7 +30,7 @@ int main(int argc,char** argv){
     int winH = 600; // Window Height
     int winW = 800; // Window Width
 
-	sf::RenderWindow app(sf::VideoMode(winH,winW),"iv : Image Viewer"); // Window initialization
+	sf::RenderWindow app(sf::VideoMode(winW,winH),"iv : Image Viewer"); // Window initialization
     { // Creating a new block so that the icon variable will be deleted after finishing setting it up
         auto icon = sf::Image(); // Setting an icon
         if(!icon.loadFromFile("images/logo.png")){
