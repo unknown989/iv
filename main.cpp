@@ -31,6 +31,7 @@ int main(int argc,char** argv){
     int winW = 800; // Window Width
 
 	sf::RenderWindow app(sf::VideoMode(winW,winH),"iv : Image Viewer"); // Window initialization
+#if defined(__linux__)
     { // Creating a new block so that the icon variable will be deleted after finishing setting it up
         auto icon = sf::Image(); // Setting an icon
         if(!icon.loadFromFile("images/logo.png")){
@@ -41,7 +42,7 @@ int main(int argc,char** argv){
 		
 		
     }
-
+#endif
 
     sf::Texture t;
     if(!t.loadFromFile(filename))return 1; // Load a texture with the img
