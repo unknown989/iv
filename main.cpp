@@ -8,50 +8,38 @@ Description : This is a PNG Image Viewer that has the basic features ,for more i
 =================================================================================
 */
 
-#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
 #include <iomanip>
 #include <stdio.h>
-#include "headers/filedialog.hpp"
+#include "stdafx.h"
+#include "filedialog.h"
 using namespace std;
-
 
 bool moveRect = true;
 int main(int argc,char** argv){
 	const char* filename = "";
-	if(argc < 2){
-		
+    if(argc < 2){
         filename = openfilename();
-	}else{
-		filename = argv[1];
-	}
+    }else{
+        filename = argv[1];
+    }
 	cout << "Filename : " << filename << endl;
     int winH = 600; // Window Height
     int winW = 800; // Window Width
 
 	sf::RenderWindow app(sf::VideoMode(winW,winH),"iv : Image Viewer"); // Window initialization
-#if defined(__linux__)
-    { // Creating a new block so that the icon variable will be deleted after finishing setting it up
-        auto icon = sf::Image(); // Setting an icon
-        if(!icon.loadFromFile("images/logo.png")){
-        	icon.loadFromFile("/usr/share/iv/icon.png");
- 	     }
-		if(icon.getPixelsPtr() != nullptr)
-			app.setIcon(icon.getSize().x,icon.getSize().y,icon.getPixelsPtr());	
-		
-		
-    }
-#endif
+
+
 
     sf::Texture t;
     if(!t.loadFromFile(filename))return 1; // Load a texture with the img
     sf::RectangleShape rect;
     rect.setSize(sf::Vector2f(t.getSize().x,t.getSize().y)); // Make a rectangle with the width and height of the image
     rect.setTexture(&t);
-    rect.setOrigin({rect.getSize().x/2,rect.getSize().y/2}); // Setting the origin to the center
-	rect.setPosition({0,0}); // Setting the rectangle to the center of the screen
-	
+    rect.setOrigin(sf::Vector2f(rect.getSize().x/2,rect.getSize().y/2)); // Setting the origin to the center
+	rect.setPosition(sf::Vector2f(0,0)); // Setting the rectangle to the center of the screen
+
     int mouseOldX = sf::Mouse::getPosition(app).x; // Mouse Previous X
     int mouseOldY = sf::Mouse::getPosition(app).y; // Mouse Previous Y
     int xMouseSpeed  = 1; // Mouse Speed at X
@@ -60,7 +48,7 @@ int main(int argc,char** argv){
     int yDelta = 0; // YDelta (check if the mouse cursor is going up or down)
     float zoom = 1; // Zooming value
 	// float zoomDelta = 1; // Variable to make the mouse slower when zooming in
-	
+
 	while(app.isOpen()){
         sf::Event event;
 		sf::Mouse mouse;
@@ -101,7 +89,7 @@ int main(int argc,char** argv){
         while (app.pollEvent(event))
                {
                	switch(event.type){
-				 	case sf::Event::Closed:{					 		
+				 	case sf::Event::Closed:{
 						cout << "Closing" << endl;
 		               	app.close();
 		               	break;
@@ -114,9 +102,9 @@ int main(int argc,char** argv){
                         moveRect = true;
                         break;
                     }
-                    
+
                		case sf::Event::MouseButtonReleased:{
-               			
+
                         xMouseSpeed = 1; // If the mouse button is released we set the speed of both x & y to 1
                         yMouseSpeed = 1;; // If the mouse button is released we set the speed of both x & y to 1
                			xDelta = 0;
@@ -124,21 +112,24 @@ int main(int argc,char** argv){
                         break;
                		}
                 	case sf::Event::MouseButtonPressed:{
-                		
+
 	                    int mouseCurrentX = sf::Mouse::getPosition(app).x; // Same the previous movement method
 	                    int mouseCurrentY = sf::Mouse::getPosition(app).y;
-	                    xMouseSpeed = abs(mouseCurrentX - mouseOldX);
+						sf::Vector2i winPos = app.getPosition();
+						if((mouseCurrentX >= winPos.x && mouseCurrentX <= winPos.x + app.getSize().x) && (mouseCurrentY >= winPos.y && mouseCurrentY <= winPos.y + app.getSize().y)){
+						xMouseSpeed = abs(mouseCurrentX - mouseOldX);
                    		yMouseSpeed = abs(mouseCurrentY - mouseOldY);
-                		break;
+						}
+						break;
                 	}
 	            	case sf::Event::MouseWheelMoved:{
-	            		
+
 						// Zooming system
 						int delta = event.mouseWheel.delta; // Direction of the mouse wheel (up,down)
-                        if(delta < 0 && ((0 < zoom) && (zoom < 4))){ // if the wheel is going up and the zoom isn't in the max and the min zoom in by 0.1
-	            		
+                        if(delta > 0 && ((0 < zoom) && (zoom < 4))){ // if the wheel is going up and the zoom isn't in the max and the min zoom in by 0.1
+
                             zoom -= 0.1;
-                        }else if(delta > 0 && ((0 < zoom) && (zoom < 4))){ // vice-versa
+                        }else if(delta < 0 && ((0 < zoom) && (zoom < 4))){ // vice-versa
                             zoom += 0.1;
                         }
                         // Pretty stupid but c++ behave weirdly
@@ -152,14 +143,14 @@ int main(int argc,char** argv){
 	            	}
 	           }
        }
-        
-        
+
+
         if(moveRect){
-            rect.move({xDelta*(float)xMouseSpeed,yDelta*(float)yMouseSpeed});// Moving the rectangle that holds the texture now using the x and y delta and the x,y speed
+            rect.move(sf::Vector2f(xDelta*(float)xMouseSpeed,yDelta*(float)yMouseSpeed));// Moving the rectangle that holds the texture now using the x and y delta and the x,y speed
             app.setView(sf::View(sf::Vector2f(0,0),sf::Vector2f(app.getSize().x*zoom,app.getSize().y*zoom))); // Setting the sf::View for implementing the zooming ability by adjust the size of the view : multiplying it by the zoom value
         }
 
-        
+
         app.clear(sf::Color::White);
         app.draw(rect);
 
