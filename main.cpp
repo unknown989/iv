@@ -12,8 +12,18 @@ Description : This is an Image Viewer that has the basic features ,for more info
 #include <string>
 #include <iomanip>
 #include <stdio.h>
-#include "stdafx.h"
-#include "filedialog.h"
+
+#if defined(_WIN32) || defined(WIN32) 
+	#include "stdafx.h"
+
+#elif defined(__linux__) // any linux distribution
+	#include <SFML/Graphics.hpp>
+#endif
+
+
+
+#include "headers/filedialog.hpp"
+
 using namespace std;
 
 bool moveRect = true;
