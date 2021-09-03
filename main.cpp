@@ -2,7 +2,7 @@
 Owner : Brian Polier
 Years : 2020-2021
 Date : 29-03-2021
-Description : This is a PNG Image Viewer that has the basic features ,for more informations read the ./Usage
+Description : This is an Image Viewer that has the basic features ,for more informations read the ./Usage
 =================================================================================
 = This software is under The GNU GPL v3 license which can be found on ./LICENSE =
 =================================================================================
